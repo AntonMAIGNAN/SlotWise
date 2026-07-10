@@ -2,9 +2,9 @@ import { t } from "elysia/type-system";
 import {
   DateQueryFilterSchema,
   StringQueryFilterSchema,
-} from "../query-filters";
+} from "../common/query-filters";
 import type { Static } from "elysia";
-import { PaginationQuerySchema, PaginationSchema } from "../pagination";
+import { PaginationQuerySchema, PaginationSchema } from "../common/pagination";
 
 const ReservationSchema = t.Object({
   id: t.String(),
