@@ -9,3 +9,5 @@ export const reservations = sqliteTable("reservations", {
   startDate: integer("start_date", { mode: "timestamp" }).notNull(),
   endDate: integer("end_date", { mode: "timestamp" }).notNull(),
 });
+
+export type ReservationType = typeof reservations.$inferSelect;
