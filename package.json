@@ -3,10 +3,15 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "workspaces": [
+    "db",
+    "server"
+  ],
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "types": "@types/bun"
 }
