@@ -1,7 +1,7 @@
 import { db } from "db";
 import { getTableColumns } from "drizzle-orm";
 import type { GetReservationQueryType, Reservation } from "./schema";
-import { convertManyQueryFiltersToDrizzleWhere } from "../query-filters";
+import { convertManyQueryFiltersToDrizzleWhere } from "../common/query-filters";
 import { reservations, type ReservationType } from "db/schemas/reservations";
 
 const mapReservationToDto = (reservation: ReservationType): Reservation => {

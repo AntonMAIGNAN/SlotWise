@@ -5,5 +5,5 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = join(__filename, "..");
 
 export const config = {
-  DATABASE_URL: join(__dirname, "..", "sqlite.db"),
+  DATABASE_URL: process.env.DATABASE_URL ?? join(__dirname, "..", "sqlite.db"),
 };

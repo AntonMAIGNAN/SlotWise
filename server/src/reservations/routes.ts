@@ -4,7 +4,6 @@ import {
   GetReservationResponseSchema,
 } from "./schema";
 import { StatusCodes } from "http-status-codes";
-import { getReservations } from "./repository";
 import { reservationService } from "../module";
 
 export const reservationRoutes = new Elysia({ prefix: "/reservations" }).get(
