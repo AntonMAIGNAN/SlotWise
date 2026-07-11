@@ -6,13 +6,22 @@ export const fetchRoute = <T extends unknown>({
   method,
   url,
   body,
+  headers,
+  ...rest
 }: {
   method: string;
   url: string;
   body?: T;
-}) => {
-  const URL = `${API_URL}${url}`;
+} & Omit<RequestInit, "body">) => {
   return app.fetch(
-    new Request(URL, { method, ...(body && { body: JSON.stringify(body) }) }),
+    new Request(`${API_URL}${url}`, {
+      method,
+      ...rest,
+      headers: {
+        ...(body && { "Content-Type": "application/json" }),
+        ...headers,
+      },
+      ...(body && { body: JSON.stringify(body) }),
+    }),
   );
 };
