@@ -10,6 +10,8 @@ export const userRoutes = new Elysia({ prefix: "/users" }).post(
   },
   {
     body: CreateUserBodySchema,
-    created: UserSchema,
+    response: {
+      [StatusCodes.CREATED]: UserSchema,
+    },
   },
 );

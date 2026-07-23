@@ -40,8 +40,6 @@ export async function getReservations(query: GetReservationQueryType) {
   };
 }
 
-let lock = Promise.resolve();
-
 export async function createReservationIfAvailable(
   payload: CreateReservationBodyType,
 ): Promise<Reservation> {
@@ -49,58 +47,45 @@ export async function createReservationIfAvailable(
   const newStart = new Date(startDate);
   const newEnd = new Date(endDate);
 
-  const executeTransaction = async () => {
-    return db.transaction(
-      (t) => {
-        const existing = t
-          .select()
-          .from(reservations)
-          .where(
-            and(
-              lte(reservations.startDate, newEnd),
-              gte(reservations.endDate, newStart),
-            ),
-          )
-          .limit(1)
-          .all();
+  return db.transaction((t) => {
+    const existing = t
+      .select()
+      .from(reservations)
+      .where(
+        and(
+          lte(reservations.startDate, newEnd),
+          gte(reservations.endDate, newStart),
+        ),
+      )
+      .limit(1)
+      .all();
 
-        if (existing.length > 0) {
-          throw new HttpError({
-            message: "Reservation dates are not available.",
-            status: StatusCodes.CONFLICT,
-            payload,
-          });
-        }
+    if (existing.length > 0) {
+      throw new HttpError({
+        message: "Reservation dates are not available.",
+        status: StatusCodes.CONFLICT,
+        payload,
+      });
+    }
 
-        const [created] = t
-          .insert(reservations)
-          .values({
-            userId: Number(userId),
-            startDate: newStart,
-            endDate: newEnd,
-          })
-          .returning()
-          .all();
+    const [created] = t
+      .insert(reservations)
+      .values({
+        userId: Number(userId),
+        startDate: newStart,
+        endDate: newEnd,
+      })
+      .returning()
+      .all();
 
-        if (!created) {
-          throw new HttpError({
-            message: "Failed to create reservation.",
-            status: StatusCodes.INTERNAL_SERVER_ERROR,
-            payload,
-          });
-        }
+    if (!created) {
+      throw new HttpError({
+        message: "Failed to create reservation.",
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        payload,
+      });
+    }
 
-        return mapReservationToDto(created);
-      },
-      { behavior: "exclusive" },
-    );
-  };
-
-  const result = lock.then(executeTransaction, executeTransaction);
-  lock = result.then(
-    () => {},
-    () => {},
-  );
-
-  return result;
+    return mapReservationToDto(created);
+  });
 }

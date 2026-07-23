@@ -3,6 +3,7 @@ import { beforeAll, describe, expect, it } from "bun:test";
 import type { ReservationType } from "db/schemas/reservations";
 import { createReservation } from "./__helpers__/createReservation";
 import { createUser } from "./__helpers__/createUser";
+import { resetDb } from "./__helpers__/resetDb";
 import {
   GetReservationQuerySchema,
   type Reservation,
@@ -24,6 +25,7 @@ describe(`getReservations - GET - ${getReservationURL}`, () => {
   let reservations: ReservationType[] = [];
 
   beforeAll(async () => {
+    await resetDb();
     await createUser({ insert: true });
 
     reservations = await Promise.all(
