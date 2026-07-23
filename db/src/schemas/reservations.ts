@@ -6,8 +6,8 @@ export const reservations = sqliteTable("reservations", {
   userId: integer("user_id")
     .notNull()
     .references(() => users.id),
-  startDate: integer("start_date", { mode: "timestamp" }).notNull(),
-  endDate: integer("end_date", { mode: "timestamp" }).notNull(),
+  startDate: integer("start_date", { mode: "timestamp_ms" }).notNull(),
+  endDate: integer("end_date", { mode: "timestamp_ms" }).notNull(),
 });
 
 export type ReservationType = typeof reservations.$inferSelect;

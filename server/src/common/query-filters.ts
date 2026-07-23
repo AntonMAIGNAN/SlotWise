@@ -13,29 +13,35 @@ import type { AnyColumn, SQL } from "drizzle-orm";
 import type { Static } from "elysia";
 import { t } from "elysia/type-system";
 
-export const StringQueryFilterSchema = t.Partial(
-  t.Object({
-    eq: t.String(),
-    ne: t.String(),
-    in: t.ArrayQuery(t.String()),
-    nin: t.ArrayQuery(t.String()),
-  }),
-);
+export const StringQueryFilterSchema = (
+  params: Parameters<typeof t.String>[0] = {},
+) =>
+  t.Partial(
+    t.Object({
+      eq: t.String(params),
+      ne: t.String(params),
+      in: t.ArrayQuery(t.String(params)),
+      nin: t.ArrayQuery(t.String(params)),
+    }),
+  );
 
-export const DateQueryFilterSchema = t.Partial(
-  t.Object({
-    eq: t.Date(),
-    ne: t.Date(),
-    gt: t.Date(),
-    gte: t.Date(),
-    lt: t.Date(),
-    lte: t.Date(),
-  }),
-);
+export const DateQueryFilterSchema = (
+  params: Parameters<typeof t.Date>[0] = {},
+) =>
+  t.Partial(
+    t.Object({
+      eq: t.Date(params),
+      ne: t.Date(params),
+      gt: t.Date(params),
+      gte: t.Date(params),
+      lt: t.Date(params),
+      lte: t.Date(params),
+    }),
+  );
 
 type QueryFilters =
-  | Static<typeof StringQueryFilterSchema>
-  | Static<typeof DateQueryFilterSchema>;
+  | Static<ReturnType<typeof StringQueryFilterSchema>>
+  | Static<ReturnType<typeof DateQueryFilterSchema>>;
 
 const convertQueryFiltersToDrizzleWhere = (
   column: AnyColumn,

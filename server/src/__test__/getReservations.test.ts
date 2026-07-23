@@ -216,7 +216,7 @@ describe(`getReservations - GET - ${getReservationURL}`, () => {
   });
 
   describe("With invalid query params", () => {
-    it(`Should return ${StatusCodes.UNPROCESSABLE_ENTITY} with invalid page`, async () => {
+    it(`Should return ${StatusCodes.BAD_REQUEST} with invalid page`, async () => {
       const params = new URLSearchParams({
         page: "0",
         pageSize: NUMBER_OF_RESERVATIONS.toString(),
@@ -227,10 +227,10 @@ describe(`getReservations - GET - ${getReservationURL}`, () => {
         url: `${getReservationURL}?${params.toString()}`,
       });
 
-      expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
-    it(`Should return ${StatusCodes.UNPROCESSABLE_ENTITY} with invalid pageSize`, async () => {
+    it(`Should return ${StatusCodes.BAD_REQUEST} with invalid pageSize`, async () => {
       const params = new URLSearchParams({
         page: "1",
         pageSize: "0",
@@ -241,11 +241,11 @@ describe(`getReservations - GET - ${getReservationURL}`, () => {
         url: `${getReservationURL}?${params.toString()}`,
       });
 
-      expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
     });
 
     describe("With invalid filters", () => {
-      it(`Should return ${StatusCodes.UNPROCESSABLE_ENTITY} with invalid id filter`, async () => {
+      it(`Should return ${StatusCodes.BAD_REQUEST} with invalid id filter`, async () => {
         const params = new URLSearchParams({
           page: "1",
           pageSize: NUMBER_OF_RESERVATIONS.toString(),
@@ -261,7 +261,7 @@ describe(`getReservations - GET - ${getReservationURL}`, () => {
           url: `${getReservationURL}?${params.toString()}`,
         });
 
-        expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+        expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       });
     });
   });

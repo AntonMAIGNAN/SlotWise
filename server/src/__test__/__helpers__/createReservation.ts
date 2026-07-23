@@ -5,13 +5,19 @@ import { createUser } from "./createUser";
 import { users } from "db/schemas/users";
 
 const reservationFactory = async (override?: Partial<ReservationType>) => {
-  const user = faker.helpers.arrayElement(await db.select().from(users).all());
+  const allUsers = await db.select().from(users).limit(100).all();
+
+  const user = faker.helpers.arrayElement(
+    allUsers.length ? allUsers : [await createUser({ insert: true })],
+  );
+
+  const startDate = faker.date.future();
 
   return {
     id: Number(faker.database.mongodbObjectId()),
-    userId: user?.id ?? user.id,
-    startDate: faker.date.future(),
-    endDate: faker.date.future(),
+    userId: Number(user?.id),
+    startDate,
+    endDate: faker.date.future({ refDate: startDate }),
     ...override,
   };
 };
@@ -22,7 +28,7 @@ export async function createReservation<T extends true | undefined>({
 }: {
   override?: Partial<ReservationType>;
   insert?: T;
-}) {
+} = {}) {
   return insert
     ? db
         .insert(reservations)
