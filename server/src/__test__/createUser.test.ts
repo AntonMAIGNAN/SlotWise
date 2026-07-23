@@ -2,7 +2,6 @@ import { describe, expect, it } from "bun:test";
 import { fetchRoute } from "./__helpers__/app";
 import { faker } from "@faker-js/faker/locale/fr";
 import { StatusCodes } from "http-status-codes";
-import type { ParseError } from "elysia/error";
 
 const URL = "/users" as const;
 
@@ -23,7 +22,7 @@ describe(`createUser - POST - ${URL}`, () => {
     });
   });
 
-  describe(`Should return ${StatusCodes.UNPROCESSABLE_ENTITY} if the body is invalid`, async () => {
+  describe(`Should return ${StatusCodes.BAD_REQUEST} if the body is invalid`, async () => {
     it("With invalid email", async () => {
       const body = {
         fullname: faker.person.fullName(),
@@ -33,7 +32,7 @@ describe(`createUser - POST - ${URL}`, () => {
       const response = await fetchRoute({ method: "POST", url: URL, body });
       const { errors } = (await response.json()) as { errors: unknown[] };
 
-      expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(errors).toEqual([
         {
           type: 50,
@@ -58,7 +57,7 @@ describe(`createUser - POST - ${URL}`, () => {
       const response = await fetchRoute({ method: "POST", url: URL, body });
       const { errors } = (await response.json()) as { errors: unknown[] };
 
-      expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(errors).toEqual([
         {
           errors: [],
@@ -80,7 +79,7 @@ describe(`createUser - POST - ${URL}`, () => {
       const response = await fetchRoute({ method: "POST", url: URL, body });
       const { errors } = (await response.json()) as { errors: unknown[] };
 
-      expect(response.status).toBe(StatusCodes.UNPROCESSABLE_ENTITY);
+      expect(response.status).toBe(StatusCodes.BAD_REQUEST);
       expect(errors).toEqual([
         {
           errors: [],
