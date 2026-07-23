@@ -5,12 +5,14 @@ import { faker } from "@faker-js/faker/locale/fr";
 import { createReservation } from "./__helpers__/createReservation";
 import { db } from "db";
 import { reservations } from "db/schemas/reservations";
+import { resetDb } from "./__helpers__/resetDb";
 
 const URL = "/reservations" as const;
 
 describe(`createReservation - POST - ${URL}`, () => {
   describe("Should throw", async () => {
     it("With transactional error (duplicate reservation)", async () => {
+      await resetDb();
       const { id: _id, ...payload } = await createReservation();
 
       const body = {

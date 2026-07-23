@@ -1,11 +1,7 @@
 import { db } from "db";
 import { users, type UserType } from "db/schemas/users";
 import type { CreateUserBodyType, GetUserQueryType } from "./schema";
-import {
-  convertManyQueryFiltersToDrizzleWhere,
-  type StringQueryFilterSchema,
-} from "../common/query-filters";
-import type { Static } from "elysia";
+import { convertManyQueryFiltersToDrizzleWhere } from "../common/query-filters";
 import { getTableColumns } from "drizzle-orm/utils";
 import { findWithPagination } from "../common/pagination";
 
